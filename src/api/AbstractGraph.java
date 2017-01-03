@@ -2,6 +2,7 @@ package api;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
  * @param <T>
  */
 public abstract class AbstractGraph<T> {
-	
+
 	protected Map<T, Map<T, Double>> graphData = new HashMap<>();
 	private Map<T, Color> colorMap = new HashMap<>();
 	private int edgeCount;
@@ -75,18 +76,19 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} only if the node was present in the graph which
 	 *         means that the structure of the graph has changed.
 	 */
-	public abstract boolean removeNode(T nodeId, boolean clear);
+	public final boolean removeNode(T nodeId) {
+		final boolean hasNode = hasNode(nodeId);
+		if (hasNode) {
+			graphData.remove(nodeId);
+			Iterator<T> nodeIterator = graphData.keySet().iterator();
+			while (nodeIterator.hasNext()) {
+				graphData.get(nodeIterator.next()).remove(nodeId);
+			}
+		}
+		return hasNode;
+	}
 
 	/**
-	 * Creates an edge between {@code tailNodeId} and {@code headNodeId} with
-	 * weight {@code weight}. It depends on the concrete implementation of this
-	 * abstract class what an edge {@code (tailNodeId, headNodeId)}. Two
-	 * possible cases are an undirected edge and a directed edge. Refer to the
-	 * documentation of the implementing graph type.
-	 * <p>
-	 * If some of the input nodes are not present in this graph, it will be
-	 * created silently.
-	 * 
 	 * @param from
 	 * @param to
 	 * @param weight
@@ -94,27 +96,24 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} only if the edge was not present in the graph, or
 	 *         the weight of the edge has changed.
 	 */
-	// TODO: must be abstract
 	public boolean addEdge(T from, T to, double weight) {
-		addNode(from);
-		addNode(to);
-		
 		Map<T, Double> fromEdges = graphData.get(from);
-		final boolean fromHadNoEdges = (fromEdges == null);
-		if (fromHadNoEdges) {
-			fromEdges = new HashMap<>();
+		boolean fromEdgeUpdated = false;
+		if (fromEdges == null) {
+			graphData.put(from, new HashMap<>());
 		}
-
 		Double oldWeight = fromEdges.put(to, weight);
-		boolean fromEdgeUpdated = (oldWeight == null || Double.compare(oldWeight, weight) != 0);
-		if (fromHadNoEdges) {
-			graphData.put(from, fromEdges);
-		}
-		if (fromEdgeUpdated) {
+		if (oldWeight == null) {
 			edgeCount++;
 		}
+		if (oldWeight == null || Double.compare(oldWeight, weight) != 0) {
+			fromEdgeUpdated = true;
+		}
+		addOppositeEdge(from, to, weight);
 		return fromEdgeUpdated;
 	}
+	
+	abstract void addOppositeEdge(T from, T to, double weight);
 
 	/**
 	 * Creates an edge between {@code tailNodeId} and {@code headNodeId} with
@@ -149,7 +148,7 @@ public abstract class AbstractGraph<T> {
 	}
 
 	/**
-	 * Removes the edge from {@code tailNodeId} and {@code headNodeId}.
+	 * Removes the edge from {@code from} and {@code to}.
 	 * 
 	 * @param from
 	 *            the tail node of the edge to remove.
@@ -158,15 +157,17 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} if the target edge was in this graph, and thus is
 	 *         removed.
 	 */
-	// TODO: must be abstract
 	public boolean removeEdge(T from, T to) {
 		if (hasEdge(from, to)) {
 			graphData.get(from).remove(to);
+			removeOppositeEdge(from, to);
 			return true;
 		} else {
 			return false;
 		}
 	}
+	
+	abstract void removeOppositeEdge(T from, T to);
 
 	/**
 	 * Returns a boolean value indicating whether this graph contains an edge
@@ -240,7 +241,7 @@ public abstract class AbstractGraph<T> {
 		return builder.toString();
 	}
 
-	private boolean hasCyclesInternal(T node) {
+	private boolean hasCyclesInternal(T node, T source) {
 		colorMap.put(node, Color.GREY);
 		Map<T, Double> adjMap = graphData.get(node);
 		if (adjMap == null) {
@@ -248,10 +249,10 @@ public abstract class AbstractGraph<T> {
 		} else {
 			Set<T> adjNodes = adjMap.keySet();
 			for (T adj : adjNodes) {
-				if (colorMap.get(adj) == Color.GREY) {
+				if (adj != node && colorMap.get(adj) == Color.GREY) {
 					return true;
 				} else {
-					return hasCyclesInternal(adj);
+					return hasCyclesInternal(adj, node);
 				}
 			}
 		}
@@ -263,7 +264,7 @@ public abstract class AbstractGraph<T> {
 			return false;
 		} else {
 			try {
-				return hasCyclesInternal(graphData.keySet().iterator().next());
+				return hasCyclesInternal(graphData.keySet().iterator().next(), null);
 			} finally {
 				colorMap.clear();
 			}

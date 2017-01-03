@@ -3,8 +3,14 @@ package api;
 public class UndirectedGraph<T> extends AbstractGraph<T> {
 
 	@Override
-	public boolean removeNode(T nodeId, boolean clear) 	{
+	void addOppositeEdge(T from, T to, double weight) {
 		// TODO Auto-generated method stub
-		return false;
+
+	}
+	
+	@Override
+	void removeOppositeEdge(T from, T to) {
+		// TODO Auto-generated method stub
+		
 	}
 }
