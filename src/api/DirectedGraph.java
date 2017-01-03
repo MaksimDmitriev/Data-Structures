@@ -23,11 +23,11 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
 	}
 
 	@Override
-	void addOppositeEdge(T from, T to, double weight) {
+	void addOppositeEdge(T to, T from, double weight) {
 	}
 
 	@Override
-	void removeOppositeEdge(T from, T to) {
+	void removeOppositeEdge(T to, T from) {
 	}
 
 	public final Set<T> outDegreeOf(T nodeId) {

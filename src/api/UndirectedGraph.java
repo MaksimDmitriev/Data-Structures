@@ -3,14 +3,12 @@ package api;
 public class UndirectedGraph<T> extends AbstractGraph<T> {
 
 	@Override
-	void addOppositeEdge(T from, T to, double weight) {
-		// TODO Auto-generated method stub
-
+	void addOppositeEdge(T to, T from, double weight) {
+		graphData.get(to).put(from, weight);
 	}
-	
+
 	@Override
-	void removeOppositeEdge(T from, T to) {
-		// TODO Auto-generated method stub
-		
+	void removeOppositeEdge(T to, T from) {
+		graphData.get(to).remove(from);
 	}
 }

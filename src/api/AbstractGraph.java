@@ -109,11 +109,11 @@ public abstract class AbstractGraph<T> {
 		if (oldWeight == null || Double.compare(oldWeight, weight) != 0) {
 			fromEdgeUpdated = true;
 		}
-		addOppositeEdge(from, to, weight);
+		addOppositeEdge(to, from, weight);
 		return fromEdgeUpdated;
 	}
 	
-	abstract void addOppositeEdge(T from, T to, double weight);
+	abstract void addOppositeEdge(T to, T from, double weight);
 
 	/**
 	 * Creates an edge between {@code tailNodeId} and {@code headNodeId} with
@@ -160,14 +160,14 @@ public abstract class AbstractGraph<T> {
 	public boolean removeEdge(T from, T to) {
 		if (hasEdge(from, to)) {
 			graphData.get(from).remove(to);
-			removeOppositeEdge(from, to);
+			removeOppositeEdge(to, from);
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	abstract void removeOppositeEdge(T from, T to);
+	abstract void removeOppositeEdge(T to, T from);
 
 	/**
 	 * Returns a boolean value indicating whether this graph contains an edge
