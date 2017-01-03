@@ -211,6 +211,7 @@ public abstract class AbstractGraph<T> {
 		Map<T, Double> adj = graphData.get(node);
 		if (adj != null) {
 			for (T adjNode : adj.keySet()) {
+				// Not visited yet
 				if (colorMap.get(adjNode) == null) {
 					dfsInternal(adjNode, builder);
 				}
@@ -244,7 +245,7 @@ public abstract class AbstractGraph<T> {
 		return builder.toString();
 	}
 
-	private boolean hasCyclesInternal(T node, T source) {
+	private boolean hasCyclesInternal(T node) {
 		colorMap.put(node, Color.GREY);
 		Map<T, Double> adjMap = graphData.get(node);
 		if (adjMap == null) {
@@ -252,10 +253,12 @@ public abstract class AbstractGraph<T> {
 		} else {
 			Set<T> adjNodes = adjMap.keySet();
 			for (T adj : adjNodes) {
-				if (adj != node && colorMap.get(adj) == Color.GREY) {
+				if (!colorMap.containsKey(adj)) {
+					if (hasCyclesInternal(adj)) {
+						return true;
+					}
+				} else if (colorMap.get(adj) == Color.GREY) {
 					return true;
-				} else {
-					return hasCyclesInternal(adj, node);
 				}
 			}
 		}
@@ -267,11 +270,16 @@ public abstract class AbstractGraph<T> {
 			return false;
 		} else {
 			try {
-				return hasCyclesInternal(graphData.keySet().iterator().next(), null);
+				return hasCyclesInternal(graphData.keySet().iterator().next());
 			} finally {
 				colorMap.clear();
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return graphData == null ? "[]" : graphData.toString();
 	}
 
 	private enum Color {
