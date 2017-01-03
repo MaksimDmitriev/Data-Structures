@@ -4,6 +4,7 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
 
 	@Override
 	void addOppositeEdge(T to, T from, double weight) {
+		ensureEdge(to, from);
 		graphData.get(to).put(from, weight);
 	}
 

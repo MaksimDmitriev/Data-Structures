@@ -97,20 +97,23 @@ public abstract class AbstractGraph<T> {
 	 *         the weight of the edge has changed.
 	 */
 	public boolean addEdge(T from, T to, double weight) {
-		Map<T, Double> fromEdges = graphData.get(from);
-		boolean fromEdgeUpdated = false;
-		if (fromEdges == null) {
-			graphData.put(from, new HashMap<>());
-		}
-		Double oldWeight = fromEdges.put(to, weight);
+		// TODO: positive infinity weight, negative infinity, NaN 
+		ensureEdge(from, to);
+		
+		Double oldWeight = graphData.get(from).put(to, weight);
 		if (oldWeight == null) {
 			edgeCount++;
 		}
-		if (oldWeight == null || Double.compare(oldWeight, weight) != 0) {
-			fromEdgeUpdated = true;
-		}
+		boolean fromEdgeUpdated = (oldWeight == null || Double.compare(oldWeight, weight) != 0);
 		addOppositeEdge(to, from, weight);
 		return fromEdgeUpdated;
+	}
+	
+	final void ensureEdge(T from, T to) {
+		Map<T, Double> fromEdges = graphData.get(from);
+		if (fromEdges == null) {
+			graphData.put(from, new HashMap<>());
+		}
 	}
 	
 	abstract void addOppositeEdge(T to, T from, double weight);
