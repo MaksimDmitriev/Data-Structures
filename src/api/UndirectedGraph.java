@@ -12,4 +12,10 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
 	void removeOppositeEdge(T to, T from) {
 		graphData.get(to).remove(from);
 	}
+	
+	@Override
+	boolean isSource(T node, T source) {
+		return node == source;
+	}
+	
 }

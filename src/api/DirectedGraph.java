@@ -37,5 +37,10 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
 			return null;
 		}
 	}
+	
+	@Override
+	boolean isSource(T node, T source) {
+		return false;
+	}
 
 }

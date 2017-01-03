@@ -125,28 +125,29 @@ public class UndirectedGraphTest {
 		Assert.assertFalse(graph.addEdge(3, 1));
 	}
 	
-	@Test
-	public void hasCycles() {
-		DirectedGraph<Integer> directedGraph = new DirectedGraph<>();
-		directedGraph.addEdge(1, 2);
-		directedGraph.addEdge(2, 3);
-		directedGraph.addEdge(2, 4);
-		directedGraph.addEdge(4, 1);
-		Assert.assertTrue(directedGraph.hasCycles());
-	}
-
-//	@Test
-//	public void hasCyclesAdjNodes() {
-//		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
-//		graph.addEdge(1, 3);
-//		Assert.assertFalse(graph.hasCycles());
-//	}
 //	@Test
 //	public void hasCycles() {
-//		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
-//		graph.addEdge(1, 3);
-//		graph.addEdge(1, 2);
-//		graph.addEdge(2, 3);
-//		Assert.assertTrue(graph.hasCycles());
+//		DirectedGraph<Integer> directedGraph = new DirectedGraph<>();
+//		directedGraph.addEdge(1, 2);
+//		directedGraph.addEdge(2, 3);
+//		directedGraph.addEdge(2, 4);
+//		directedGraph.addEdge(4, 1);
+//		Assert.assertTrue(directedGraph.hasCycles());
 //	}
+
+	@Test
+	public void hasCyclesAdjNodes() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 3);
+		Assert.assertFalse(graph.hasCycles());
+	}
+	
+	@Test
+	public void hasCycles() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(2, 3);
+		Assert.assertTrue(graph.hasCycles());
+	}
 }
