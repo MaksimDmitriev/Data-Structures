@@ -17,9 +17,17 @@ import java.util.Set;
  */
 public abstract class AbstractGraph<T> {
 
-	protected Map<T, Map<T, Double>> graphData = new HashMap<>();
+	protected final Map<T, Map<T, Double>> graphData;
 	private Map<T, Color> colorMap = new HashMap<>();
 	private int edgeCount;
+	
+	public AbstractGraph() {
+		graphData = new HashMap<>();
+	}
+	
+	public AbstractGraph(AbstractGraph<T> graph) {
+		graphData = new HashMap<>(graph.graphData);
+	}
 
 	/**
 	 * Returns the number of nodes in this graph.
@@ -100,8 +108,8 @@ public abstract class AbstractGraph<T> {
 		if (weight == Double.NEGATIVE_INFINITY || Double.isNaN(weight)) {
 			throw new IllegalArgumentException("weight must be a number or the positive inifinity");
 		}
-		ensureEdge(from, to);
-		
+		ensureCanAddEdge(from);
+		ensureCanAddEdge(to);
 		Double oldWeight = graphData.get(from).put(to, weight);
 		if (oldWeight == null) {
 			edgeCount++;
@@ -111,10 +119,10 @@ public abstract class AbstractGraph<T> {
 		return fromEdgeUpdated;
 	}
 	
-	final void ensureEdge(T from, T to) {
-		Map<T, Double> fromEdges = graphData.get(from);
+	final void ensureCanAddEdge(T node) {
+		Map<T, Double> fromEdges = graphData.get(node);
 		if (fromEdges == null) {
-			graphData.put(from, new HashMap<>());
+			graphData.put(node, new HashMap<>());
 		}
 	}
 	
@@ -285,7 +293,7 @@ public abstract class AbstractGraph<T> {
 	
 	@Override
 	public String toString() {
-		return graphData == null ? "[]" : graphData.toString();
+		return graphData.isEmpty() ? "[]" : graphData.toString();
 	}
 
 	private enum Color {

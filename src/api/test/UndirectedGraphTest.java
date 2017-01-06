@@ -197,10 +197,41 @@ public class UndirectedGraphTest {
 		graph.addNode(34);
 		Assert.assertTrue(Double.isNaN(graph.getEdgeWeight(2, 67)));
 	}
-	
+
 	@Test
 	public void hasCyclesEmpty() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		Assert.assertFalse(graph.hasCycles());
+	}
+	
+	@Test
+	public void removeEdge() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 5);
+		Assert.assertTrue(graph.removeEdge(1, 2));
+		Assert.assertFalse(graph.hasEdge(2, 2));
+		Assert.assertTrue(graph.hasEdge(1, 3));
+		Assert.assertTrue(graph.hasEdge(2, 5));
+	}
+
+	@Test
+	public void removeNode() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(1, 4);
+		graph.addEdge(1, 5);
+		graph.addEdge(3, 4);
+		graph.addEdge(3, 5);
+		graph.addEdge(4, 5);
+		graph.addEdge(4, 6);
+		graph.addEdge(2, 4);
+		graph.addEdge(5, 6);
+		Assert.assertTrue(graph.removeNode(3));
+		Assert.assertFalse(graph.hasEdge(1, 3));
+		Assert.assertFalse(graph.hasEdge(5, 3));
+		Assert.assertFalse(graph.hasEdge(4, 3));
 	}
 }
