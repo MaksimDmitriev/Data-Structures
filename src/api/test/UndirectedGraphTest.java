@@ -6,6 +6,8 @@ import org.junit.Test;
 import api.UndirectedGraph;
 
 public class UndirectedGraphTest {
+	
+	private static final double EPSILON = 0.000001;
 
 	@Test
 	public void addFirstNode() {
@@ -91,7 +93,8 @@ public class UndirectedGraphTest {
 	public void updateEdgeWeight() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		graph.addEdge(1, 3);
-		Assert.assertTrue(graph.addEdge(1, 3, 2.0));
+		graph.addEdge(1, 3, 2.0);
+		Assert.assertTrue(Double.compare(2.0, graph.getEdgeWeight(1, 3)) == 0);
 	}
 
 	@Test
@@ -99,15 +102,17 @@ public class UndirectedGraphTest {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		graph.addEdge(1, 3);
 		graph.addEdge(1, 3, 2.0);
-		Assert.assertTrue(Double.compare(graph.getEdgeWeight(1, 3), 2.0) == 0);
+		final double expected = 2.0;
+		Assert.assertEquals(expected, graph.getEdgeWeight(1, 3), EPSILON);
 	}
 
 	@Test
 	public void checkOppositeWeightUpdated() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		graph.addEdge(1, 3);
-		graph.addEdge(1, 3, 2.0);
-		Assert.assertTrue(Double.compare(graph.getEdgeWeight(3, 1), 2.0) == 0);
+		graph.addEdge(1, 3, 3.6);
+		final double expected = 3.6;
+		Assert.assertEquals(expected, graph.getEdgeWeight(1, 3), EPSILON);
 	}
 
 	@Test

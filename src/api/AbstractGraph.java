@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public abstract class AbstractGraph<T> {
 
+	// O(V+E)
 	protected final Map<T, Map<T, Double>> graphData;
 	private final Map<T, Color> colorMap = new HashMap<>();
 	private int edgeCount;
@@ -48,7 +49,7 @@ public abstract class AbstractGraph<T> {
 	}
 
 	/**
-	 * Adds the node with ID {@code nodeId} to this graph.
+	 * Adds the node with ID {@code nodeId} to this graph. O(1)
 	 * 
 	 * @param nodeId
 	 *            the ID of the node to add.
@@ -115,7 +116,9 @@ public abstract class AbstractGraph<T> {
 			edgeCount++;
 		}
 		boolean fromEdgeUpdated = (oldWeight == null || Double.compare(oldWeight, weight) != 0);
-		addOppositeEdge(to, from, weight);
+		if (fromEdgeUpdated) {
+			addOppositeEdge(to, from, weight);
+		}
 		return fromEdgeUpdated;
 	}
 	
