@@ -18,7 +18,7 @@ import java.util.Set;
 public abstract class AbstractGraph<T> {
 
 	protected final Map<T, Map<T, Double>> graphData;
-	private Map<T, Color> colorMap = new HashMap<>();
+	private final Map<T, Color> colorMap = new HashMap<>();
 	private int edgeCount;
 	
 	public AbstractGraph() {
