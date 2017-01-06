@@ -7,38 +7,48 @@ import api.BinarySearchTree;
 public class BinarySearchTreeTest {
 
 	@Test
-	public void isCompleteEmpty() {
+	public void isCompleteRootOnly() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
 		binarySearchTree.insert(12);
 		Assert.assertTrue(binarySearchTree.isComplete());
 	}
 
 	@Test
-	public void isRootAndLeftEmpty() {
+	public void isCompleteRootAndLeft() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
 		binarySearchTree.insertAll(12, 4);
 		Assert.assertTrue(binarySearchTree.isComplete());
 	}
 
 	@Test
-	public void isRootLeftAndRightEmpty() {
+	public void isCompleteRootLeftAndRight() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
 		binarySearchTree.insertAll(12, 7, 78);
 		Assert.assertTrue(binarySearchTree.isComplete());
 	}
 
 	@Test
-	public void isTreeLevelsComplete() {
+	public void isCompleteLastLevelFilled() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
-		binarySearchTree.insertAll(12, 7, 78, 1, 2, 45, 89);
+		binarySearchTree.insertAll(12, 7, 78, 1, 11, 45, 89);
 		Assert.assertTrue(binarySearchTree.isComplete());
 	}
 
 	@Test
-	public void isTreeLevelsNoLastRightComplete() {
+	public void isCompleteLastLevelNotFilledCompletely() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
-		binarySearchTree.insertAll(12, 7, 78, 1, 2, 45);
+		binarySearchTree.insertAll(12, 7, 78, 1, 11, 45);
 		Assert.assertTrue(binarySearchTree.isComplete());
 	}
+	
+	@Test
+	public void isNotCompleteLeftAbsent() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 7, 78, 1, 11, 89);
+		Assert.assertFalse(binarySearchTree.isComplete());
+	}
+	
+	@Test
+	public void isNotCompleteRightAbsent() {}
 
 }

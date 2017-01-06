@@ -39,27 +39,36 @@ public class BinarySearchTree {
 	}
 
 	public boolean isComplete() {
+		boolean result = true;
 		if (root == null) {
-			return false;
-		}
-		Queue<Node> nodes = new ArrayDeque<>();
-		nodes.add(root);
-		boolean encounteredNull = false;
-		while (!nodes.isEmpty()) {
-			Node node = nodes.remove();
-			if (node.left != null) {
-				nodes.add(node.left);
-			} else {
-				encounteredNull = true;
-			}
-			if (node.right != null) {
-				if (encounteredNull) {
-					return false;
+			result = false;
+		} else {
+			Queue<Node> nodes = new ArrayDeque<>();
+			nodes.add(root);
+			boolean hitLeaf = false;
+			while (!nodes.isEmpty()) {
+				Node node = nodes.remove();
+				if (node.left == null) {
+					if (node.right == null) {
+						hitLeaf = true;
+					} else {
+						result = false;
+						break;
+					}
+				} else {
+					if (hitLeaf) {
+						result = false;
+						break;
+					}
+					nodes.add(node.left);
+					if (node.right != null) {
+						nodes.add(node.right);
+					}
 				}
-				nodes.add(node.right);
 			}
 		}
-		return true;
+
+		return result;
 	}
 
 	public boolean isFull() {
@@ -74,6 +83,11 @@ public class BinarySearchTree {
 
 		Node(int key) {
 			this.key = key;
+		}
+
+		@Override
+		public String toString() {
+			return Integer.toString(key);
 		}
 	}
 }
