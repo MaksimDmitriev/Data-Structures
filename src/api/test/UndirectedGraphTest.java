@@ -68,7 +68,7 @@ public class UndirectedGraphTest {
 		graph.addNode(2);
 		Assert.assertTrue(graph.addEdge(1, 2));
 	}
-	
+
 	@Test
 	public void checkExistingNodesConnected() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
@@ -77,7 +77,7 @@ public class UndirectedGraphTest {
 		graph.addEdge(1, 2);
 		Assert.assertTrue(graph.hasEdge(1, 2));
 	}
-	
+
 	@Test
 	public void checkExistingOppositeNodesConnected() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
@@ -93,7 +93,7 @@ public class UndirectedGraphTest {
 		graph.addEdge(1, 3);
 		Assert.assertTrue(graph.addEdge(1, 3, 2.0));
 	}
-	
+
 	@Test
 	public void checkWeightUpdated() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
@@ -101,7 +101,7 @@ public class UndirectedGraphTest {
 		graph.addEdge(1, 3, 2.0);
 		Assert.assertTrue(Double.compare(graph.getEdgeWeight(1, 3), 2.0) == 0);
 	}
-	
+
 	@Test
 	public void checkOppositeWeightUpdated() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
@@ -116,31 +116,44 @@ public class UndirectedGraphTest {
 		graph.addEdge(1, 3);
 		Assert.assertFalse(graph.addEdge(1, 3));
 	}
-	
+
 	@Test
 	public void connectOppositeOfAlreadyConnectedNodes() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		graph.addEdge(1, 3);
 		Assert.assertFalse(graph.addEdge(3, 1));
 	}
-	
-//	@Test
-//	public void hasCycles() {
-//		DirectedGraph<Integer> directedGraph = new DirectedGraph<>();
-//		directedGraph.addEdge(1, 2);
-//		directedGraph.addEdge(2, 3);
-//		directedGraph.addEdge(2, 4);
-//		directedGraph.addEdge(4, 1);
-//		Assert.assertTrue(directedGraph.hasCycles());
-//	}
 
 	@Test
-	public void hasCyclesAdjNodes() {
+	public void hasNoCyclesTwoNodes() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
 		graph.addEdge(1, 3);
 		Assert.assertFalse(graph.hasCycles());
 	}
-	
+
+	@Test
+	public void hasSelfLoop() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 1);
+		Assert.assertTrue(graph.hasCycles());
+	}
+
+	@Test
+	public void hasNoLoopsSingleNode() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addNode(12);
+		Assert.assertFalse(graph.hasCycles());
+	}
+
+	@Test
+	public void hasSelfLoop2() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2);
+		graph.addEdge(2, 3);
+		graph.addEdge(3, 3);
+		Assert.assertTrue(graph.hasCycles());
+	}
+
 	@Test
 	public void hasCycles() {
 		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
@@ -148,5 +161,46 @@ public class UndirectedGraphTest {
 		graph.addEdge(1, 2);
 		graph.addEdge(2, 3);
 		Assert.assertTrue(graph.hasCycles());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void addNonEdge() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2, Double.NaN);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void addNegativeInfinityEdge() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2, Double.NEGATIVE_INFINITY);
+	}
+
+	@Test
+	public void addPositiveInfinityEdge() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addEdge(1, 2, Double.POSITIVE_INFINITY);
+		Assert.assertTrue(graph.getEdgeWeight(1, 2) == Double.POSITIVE_INFINITY);
+	}
+
+	@Test
+	public void nanWeightWhenNoEdge() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addNode(1);
+		graph.addNode(34);
+		Assert.assertTrue(Double.isNaN(graph.getEdgeWeight(1, 34)));
+	}
+
+	@Test
+	public void nanWeightWhenNoNodes() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		graph.addNode(1);
+		graph.addNode(34);
+		Assert.assertTrue(Double.isNaN(graph.getEdgeWeight(2, 67)));
+	}
+	
+	@Test
+	public void hasCyclesEmpty() {
+		UndirectedGraph<Integer> graph = new UndirectedGraph<>();
+		Assert.assertFalse(graph.hasCycles());
 	}
 }

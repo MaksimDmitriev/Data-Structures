@@ -96,8 +96,10 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} only if the edge was not present in the graph, or
 	 *         the weight of the edge has changed.
 	 */
-	public boolean addEdge(T from, T to, double weight) {
-		// TODO: positive infinity weight, negative infinity, NaN 
+	public final boolean addEdge(T from, T to, double weight) {
+		if (weight == Double.NEGATIVE_INFINITY || Double.isNaN(weight)) {
+			throw new IllegalArgumentException("weight must be a number or the positive inifinity");
+		}
 		ensureEdge(from, to);
 		
 		Double oldWeight = graphData.get(from).put(to, weight);
@@ -130,7 +132,7 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} only if the edge was not present in the graph, or
 	 *         the weight of the edge has changed.
 	 */
-	public boolean addEdge(T from, T to) {
+	public final boolean addEdge(T from, T to) {
 		return addEdge(from, to, 1.0);
 	}
 
@@ -160,7 +162,7 @@ public abstract class AbstractGraph<T> {
 	 * @return {@code true} if the target edge was in this graph, and thus is
 	 *         removed.
 	 */
-	public boolean removeEdge(T from, T to) {
+	public final boolean removeEdge(T from, T to) {
 		if (hasEdge(from, to)) {
 			graphData.get(from).remove(to);
 			removeOppositeEdge(to, from);
