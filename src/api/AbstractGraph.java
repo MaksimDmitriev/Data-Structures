@@ -245,29 +245,29 @@ public abstract class AbstractGraph<T> {
 		return builder.toString();
 	}
 
-	private boolean hasCyclesInternal(T node, T source) {
-		colorMap.put(node, Color.GREY);
-		Map<T, Double> adjMap = graphData.get(node);
+	private boolean hasCyclesInternal(T current, T source) {
+		colorMap.put(current, Color.GREY);
+		Map<T, Double> adjMap = graphData.get(current);
 		if (adjMap == null) {
-			colorMap.put(node, Color.BLACK);
+			colorMap.put(current, Color.BLACK);
 			return false;
 		} else {
 			Set<T> adjNodes = adjMap.keySet();
 			for (T adj : adjNodes) {
 				if (!colorMap.containsKey(adj)) {
-					if (hasCyclesInternal(adj, node)) {
+					if (hasCyclesInternal(adj, current)) {
 						return true;
 					}
-				} else if (!isSource(node, adj) && colorMap.get(adj) == Color.GREY) {
+				} else if (!isSource(adj, source) && colorMap.get(adj) == Color.GREY) {
 					return true;
 				}
 			}
-			colorMap.put(node, Color.BLACK);
+			colorMap.put(current, Color.BLACK);
 		}
 		return false;
 	}
 	
-	abstract boolean isSource(T current, T source);
+	abstract boolean isSource(T adj, T source);
 
 	public final boolean hasCycles() {
 		if (graphData.isEmpty()) {

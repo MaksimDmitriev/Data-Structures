@@ -3,7 +3,6 @@ package api.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import api.DirectedGraph;
 import api.UndirectedGraph;
 
 public class UndirectedGraphTest {
