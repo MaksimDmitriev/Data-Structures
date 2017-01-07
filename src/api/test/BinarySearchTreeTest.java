@@ -68,19 +68,68 @@ public class BinarySearchTreeTest {
 		binarySearchTree.insertAll(new int[] { 10, 9, 8 });
 		Assert.assertFalse(binarySearchTree.isComplete());
 	}
-	
+
 	@Test
 	public void isCompleteLinkedListRight() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
 		binarySearchTree.insertAll(new int[] { 10, 11 });
 		Assert.assertFalse(binarySearchTree.isComplete());
 	}
-	
+
 	@Test
 	public void isCompleteLastButOneLevelNotFilled() {
 		BinarySearchTree binarySearchTree = new BinarySearchTree();
 		binarySearchTree.insertAll(new int[] { 10, 6, 15, 5, 8, 13, 4 });
 		Assert.assertFalse(binarySearchTree.isComplete());
+	}
+
+	@Test
+	public void isFullRoot() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insert(12);
+		Assert.assertTrue(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFullRootAndTwoChildren() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 11, 13);
+		Assert.assertTrue(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFull() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 10, 15, 1, 11, 13, 78);
+		Assert.assertTrue(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFullRootAndLeft() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 10);
+		Assert.assertFalse(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFullRootAndRight() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 13);
+		Assert.assertFalse(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFullGapAtLastLevel() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 10, 15, 1, 13, 78);
+		Assert.assertFalse(binarySearchTree.isFull());
+	}
+
+	@Test
+	public void isFullGapAtLastLevel2() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 10, 15, 1, 11, 78);
+		Assert.assertFalse(binarySearchTree.isFull());
 	}
 
 }
