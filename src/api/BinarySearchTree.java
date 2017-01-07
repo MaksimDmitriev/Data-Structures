@@ -48,9 +48,13 @@ public class BinarySearchTree {
 			boolean mustBeLeaf = false;
 			while (!nodes.isEmpty()) {
 				Node node = nodes.remove();
-				if (mustBeLeaf && !isLeaf(node)) {
-					result = false;
-					break;
+				if (mustBeLeaf) {
+					if (isLeaf(node)) {
+						continue;
+					} else {
+						result = false;
+						break;
+					}
 				}
 				if (node.right == null) {
 					mustBeLeaf = true;
