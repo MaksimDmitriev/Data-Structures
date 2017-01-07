@@ -18,9 +18,9 @@ public class BinarySearchTree {
 				current = (key < current.key) ? current.left : current.right;
 			}
 			if (key < parent.key) {
-				parent.left = new Node(key);
+				parent.setLeft(new Node(key));
 			} else {
-				parent.right = new Node(key);
+				parent.setRight(new Node(key));
 			}
 		}
 	}
@@ -45,30 +45,33 @@ public class BinarySearchTree {
 		} else {
 			Queue<Node> nodes = new ArrayDeque<>();
 			nodes.add(root);
-			boolean hitLeaf = false;
+			boolean mustBeLeaf = false;
 			while (!nodes.isEmpty()) {
 				Node node = nodes.remove();
-				if (node.left == null) {
-					if (node.right == null) {
-						hitLeaf = true;
-					} else {
-						result = false;
-						break;
-					}
-				} else {
-					if (hitLeaf) {
-						result = false;
-						break;
-					}
+				if (mustBeLeaf && !isLeaf(node)) {
+					result = false;
+					break;
+				}
+				if (node.right == null) {
+					mustBeLeaf = true;
+				} else if (node.left == null) {
+					result = false;
+					break;
+				}
+				
+				if (node.left != null) {
 					nodes.add(node.left);
-					if (node.right != null) {
-						nodes.add(node.right);
-					}
+				}
+				if (node.right != null) {
+					nodes.add(node.right);
 				}
 			}
 		}
-
 		return result;
+	}
+	
+	private boolean isLeaf(Node node) {
+		return node.left == null && node.right == null;
 	}
 
 	public boolean isFull() {
@@ -80,6 +83,7 @@ public class BinarySearchTree {
 		int key;
 		Node left;
 		Node right;
+		int depth;
 
 		Node(int key) {
 			this.key = key;
@@ -88,6 +92,16 @@ public class BinarySearchTree {
 		@Override
 		public String toString() {
 			return Integer.toString(key);
+		}
+		
+		void setLeft(Node left) {
+			left.depth = depth + 1;
+			this.left = left;
+		}
+		
+		void setRight(Node right) {
+			right.depth = depth + 1;
+			this.right = right;
 		}
 	}
 }

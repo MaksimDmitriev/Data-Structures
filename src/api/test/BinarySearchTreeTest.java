@@ -49,6 +49,10 @@ public class BinarySearchTreeTest {
 	}
 	
 	@Test
-	public void isNotCompleteRightAbsent() {}
+	public void isNotCompleteRightAbsent() {
+		BinarySearchTree binarySearchTree = new BinarySearchTree();
+		binarySearchTree.insertAll(12, 7, 78, 1, 45, 89);
+		Assert.assertFalse(binarySearchTree.isComplete());
+	}
 
 }
