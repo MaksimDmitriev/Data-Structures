@@ -83,7 +83,6 @@ public class BinarySearchTree {
 		int key;
 		Node left;
 		Node right;
-		int depth;
 
 		Node(int key) {
 			this.key = key;
@@ -95,12 +94,10 @@ public class BinarySearchTree {
 		}
 		
 		void setLeft(Node left) {
-			left.depth = depth + 1;
 			this.left = left;
 		}
 		
 		void setRight(Node right) {
-			right.depth = depth + 1;
 			this.right = right;
 		}
 	}
